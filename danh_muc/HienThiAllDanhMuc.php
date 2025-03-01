@@ -4,7 +4,7 @@ require_once '../database/DatabaseConnection.php';
 // Lấy tất cả danh mục từ cơ sở dữ liệu
 function getAllCategories($conn)
 {
-    $sql = "SELECT id, ten_danh_muc FROM danh_muc";
+    $sql = "SELECT id, ten_danh_muc , mo_ta FROM danh_muc";
     $stmt = $conn->prepare($sql); // tạo đối tượng thực thi câu lệnh sql
     $stmt->execute(); // thực thi câu lệnh sql
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // lấy tất cả kết quả trả về từ câu lệnh sql
