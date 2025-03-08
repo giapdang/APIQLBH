@@ -4,7 +4,7 @@ require_once '../database/DatabaseConnection.php';
 
 // Lấy tất cả sản phẩm từ cơ sở dữ liệu theo tên sản phẩm
 function getSanPhamTheoTen($conn, $ten_san_pham) {
-    $sql = "SELECT sp.id, sp.ten_san_pham
+    $sql = "SELECT sp.id, sp.ten_san_pham ,sp.gia , sp.hinh_anh
             FROM san_pham sp WHERE sp.ten_san_pham LIKE :ten_san_pham";
     $stmt = $conn->prepare($sql); // tạo đối tượng thực thi câu lệnh sql
     $stmt->execute([':ten_san_pham' => '%'.$ten_san_pham.'%']); // thực thi câu lệnh sql

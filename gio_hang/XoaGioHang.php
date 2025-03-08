@@ -14,22 +14,14 @@ function xoaMucGioHang($conn, $gio_hang_id, $nguoi_dung_id) {
 
 // Kiểm tra phương thức yêu cầu
 if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-    // Đọc dữ liệu từ php://input
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Kiểm tra xem các trường dữ liệu có tồn tại không
-    if (!isset($data['gio_hang_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp ID giỏ hàng.']);
+    // Đọc dữ liệu từ query parameters
+    if (!isset($_GET['gio_hang_id']) || !isset($_GET['user_id'])) {
+        echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp ID giỏ hàng và user_id.']);
         exit();
     }
 
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập.']);
-        exit();
-    }
-
-    $gio_hang_id = $data['gio_hang_id'];
-    $nguoi_dung_id = $_SESSION['user_id']; // Giả sử user_id được lưu trong session
+    $gio_hang_id = trim($_GET['gio_hang_id']);
+    $nguoi_dung_id = trim($_GET['user_id']);
 
     // Xóa mục giỏ hàng theo id giỏ hàng
     if (xoaMucGioHang($conn, $gio_hang_id, $nguoi_dung_id)) {

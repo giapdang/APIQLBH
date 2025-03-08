@@ -25,12 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "PUT") {
     $data = json_decode(file_get_contents("php://input"), true);
 
     // Kiểm tra xem các trường dữ liệu có tồn tại không
-    if (!isset($data['old_password']) || !isset($data['new_password']) || !isset($data['confirm_password'])) {
+    if (!isset($data['user_id']) || !isset($data['old_password']) || !isset($data['new_password']) || !isset($data['confirm_password'])) {
         echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp đầy đủ thông tin.']);
         exit();
     }
 
-    $userId = $_SESSION['user_id']; // Giả sử user_id được lưu trong session
+    $userId = trim($data['user_id']);
     $oldPassword = trim($data['old_password']);
     $newPassword = trim($data['new_password']);
     $confirmPassword = trim($data['confirm_password']);

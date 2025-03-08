@@ -36,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Kiểm tra xem mật khẩu có được hash không
             if (password_verify($password, $user['mat_khau'])) {
                 $_SESSION['user_id'] = $user['id']; // Lưu user_id vào session
-                echo json_encode(["success" => "Đăng nhập thành công!", "user_id" => $user['id']]);
+                // Trả về thong bao dang nhap thanh cong va user_id
+                echo json_encode(["success" => "Đăng nhập thành công.", "user_id" => $user['id']]);
             } else {
                 echo json_encode(["error" => "Mật khẩu không chính xác."]);
             }

@@ -5,30 +5,22 @@ require_once '../database/DatabaseConnection.php';
 header("Content-Type: application/json");
 
 if ($_SERVER["REQUEST_METHOD"] == "PUT") {
-    
-    // Kiểm tra xem email có tồn tại trong session không
-    if (!isset($_SESSION['email'])) {
-        echo json_encode(["error" => "Email không tồn tại trong session."]);
-        exit();
-    }
-
-    $email = $_SESSION['email'];
-
     // Đọc dữ liệu JSON từ request body
     $data = json_decode(file_get_contents("php://input"), true);
 
     // Kiểm tra xem dữ liệu JSON có tồn tại và có các trường cần thiết không
-    if (!isset($data['new_password']) || !isset($data['confirm_password'])) {
-        echo json_encode(["error" => "Vui lòng cung cấp mật khẩu mới và xác nhận mật khẩu."]);
+    if (!isset($data['email']) || !isset($data['new_password']) || !isset($data['confirm_password'])) {
+        echo json_encode(["error" => "Vui lòng cung cấp email, mật khẩu mới và xác nhận mật khẩu."]);
         exit();
     }
 
+    $email = trim($data['email']);
     $newPassword = trim($data['new_password']);
     $confirmPassword = trim($data['confirm_password']);
 
     // Kiểm tra xem các trường dữ liệu có bị trống không
-    if (empty($newPassword) || empty($confirmPassword)) {
-        echo json_encode(["error" => "Vui lòng nhập mật khẩu mới và xác nhận mật khẩu."]);
+    if (empty($email) || empty($newPassword) || empty($confirmPassword)) {
+        echo json_encode(["error" => "Vui lòng nhập email, mật khẩu mới và xác nhận mật khẩu."]);
         exit();
     }
 

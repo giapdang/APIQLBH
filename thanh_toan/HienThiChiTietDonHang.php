@@ -1,10 +1,9 @@
 <?php
-session_start();
 require_once '../database/DatabaseConnection.php';
 
 // Hàm lấy chi tiết đơn hàng
 function getChiTietDonHang($conn, $don_hang_id) {
-    $sql = "SELECT ctdh.id, sp.ten_san_pham, sp.gia, ctdh.so_luong, ctdh.don_gia, ctdh.thanh_tien
+    $sql = "SELECT ctdh.id, sp.ten_san_pham, sp.gia, ctdh.so_luong, ctdh.thanh_tien , sp.hinh_anh
             FROM chi_tiet_don_hang ctdh
             JOIN san_pham sp ON ctdh.san_pham_id = sp.id
             WHERE ctdh.don_hang_id = :don_hang_id";
@@ -15,12 +14,12 @@ function getChiTietDonHang($conn, $don_hang_id) {
 
 // Kiểm tra phương thức yêu cầu
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập.']);
+    if (!isset($_GET['don_hang_id'])) {
+        echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp ID đơn hàng.']);
         exit();
     }
 
-    $don_hang_id = $_GET['don_hang_id'];
+    $don_hang_id = trim($_GET['don_hang_id']);
     $chi_tiet_don_hang = getChiTietDonHang($conn, $don_hang_id);
     header('Content-Type: application/json');
     echo json_encode($chi_tiet_don_hang);

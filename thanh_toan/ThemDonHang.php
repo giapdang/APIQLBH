@@ -25,6 +25,16 @@ function themChiTietDonHang($conn, $don_hang_id, $san_pham_id, $so_luong, $don_g
     ]);
 }
 
+// Hàm cập nhật số lượng sản phẩm
+function capNhatSoLuongSanPham($conn, $san_pham_id, $so_luong) {
+    $sql = "UPDATE san_pham SET so_luong = so_luong - :so_luong WHERE id = :san_pham_id";
+    $stmt = $conn->prepare($sql);
+    return $stmt->execute([
+        ':so_luong' => $so_luong,
+        ':san_pham_id' => $san_pham_id
+    ]);
+}
+
 // Hàm xóa giỏ hàng theo danh sách ID
 function xoaGioHangTheoId($conn, $danh_sach_gio_hang_id) {
     if (!empty($danh_sach_gio_hang_id)) {
@@ -40,12 +50,12 @@ function xoaGioHangTheoId($conn, $danh_sach_gio_hang_id) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
     
-    if (!isset($data['san_pham']) || !is_array($data['san_pham'])) {
+    if (!isset($data['san_pham']) || !is_array($data['san_pham']) || !isset($data['user_id'])) {
         echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp đầy đủ thông tin.']);
         exit();
     }
     
-    $nguoi_dung_id = $_SESSION['user_id']; // Giả sử user_id được lưu trong session
+    $nguoi_dung_id = $data['user_id'];
     $tong_tien = 0;
     $danh_sach_gio_hang_id = [];
 
@@ -60,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($don_hang_id) {
         foreach ($data['san_pham'] as $san_pham) {
             themChiTietDonHang($conn, $don_hang_id, $san_pham['san_pham_id'], $san_pham['so_luong'], $san_pham['don_gia']);
+            capNhatSoLuongSanPham($conn, $san_pham['san_pham_id'], $san_pham['so_luong']);
             $danh_sach_gio_hang_id[] = $san_pham['gio_hang_id'];
         }
 

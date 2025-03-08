@@ -14,12 +14,13 @@ function getDonHangByUser($conn, $nguoi_dung_id) {
 
 // Kiểm tra phương thức yêu cầu
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập.']);
+    // Đọc dữ liệu từ query parameters
+    if (!isset($_GET['user_id'])) {
+        echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp user_id.']);
         exit();
     }
 
-    $nguoi_dung_id = $_SESSION['user_id']; // Giả sử user_id được lưu trong session
+    $nguoi_dung_id = trim($_GET['user_id']);
 
     // Lấy đơn hàng của người dùng
     $don_hang = getDonHangByUser($conn, $nguoi_dung_id);

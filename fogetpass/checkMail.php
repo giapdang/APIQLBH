@@ -6,17 +6,14 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 header("Content-Type: application/json");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Đọc dữ liệu JSON từ request body
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Kiểm tra xem dữ liệu JSON có tồn tại và có các trường cần thiết không
-    if (!isset($data['email'])) {
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // Đọc dữ liệu từ query parameters
+    if (!isset($_GET['email'])) {
         echo json_encode(["error" => "Vui lòng cung cấp email."]);
         exit();
     }
 
-    $email = trim($data['email']);
+    $email = trim($_GET['email']);
 
     // Kiểm tra xem trường email có bị trống không
     if (empty($email)) {
@@ -50,8 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Send OTP to email
             sendOTPEmail($email, $otp);
 
-            // Lưu email vào session
-            $_SESSION['email'] = $email;
             echo json_encode(["success" => "OTP đã được gửi đến email của bạn."]);
         } else {
             echo json_encode(["error" => "Email không tồn tại."]);

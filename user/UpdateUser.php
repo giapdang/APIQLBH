@@ -22,25 +22,20 @@ if ($_SERVER["REQUEST_METHOD"] == "PUT") {
     $data = json_decode(file_get_contents("php://input"), true);
 
     // Kiểm tra xem các trường dữ liệu có tồn tại không
-    if (!isset($data['ho_ten']) || !isset($data['email']) || !isset($data['so_dien_thoai']) || !isset($data['dia_chi'])) {
+    if (!isset($data['user_id']) || !isset($data['ho_ten']) || !isset($data['email']) || !isset($data['so_dien_thoai']) || !isset($data['dia_chi'])) {
         echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp đầy đủ thông tin.']);
         exit();
     }
 
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập.']);
-        exit();
-    }
-
-    $id = $_SESSION['user_id'];
+    $id = $data['user_id'];
     $ho_ten = $data['ho_ten'];
     $email = $data['email'];
     $so_dien_thoai = $data['so_dien_thoai'];
     $dia_chi = $data['dia_chi'];
 
-    updateUser($conn, $id, $ho_ten, $email, $so_dien_thoai, $dia_chi);
+    $result = updateUser($conn, $id, $ho_ten, $email, $so_dien_thoai, $dia_chi);
 
     header('Content-Type: application/json'); // xác định kiểu dữ liệu trả về
-    echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin thành công.']); // trả về dữ liệu dưới dạng JSON
+    echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin thành công.', 'rows_affected' => $result]); // trả về dữ liệu dưới dạng JSON
 }
 ?>

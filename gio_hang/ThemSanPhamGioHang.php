@@ -19,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
 
     // Kiểm tra xem các trường dữ liệu có tồn tại không
-    if (!isset($data['san_pham_id']) || !isset($data['so_luong'])) {
+    if (!isset($data['user_id']) || !isset($data['san_pham_id']) || !isset($data['so_luong'])) {
         echo json_encode(['success' => false, 'message' => 'Vui lòng cung cấp đầy đủ thông tin.']);
         exit();
     }
 
-    $nguoi_dung_id = $_SESSION['user_id']; // Giả sử user_id được lưu trong session
+    $nguoi_dung_id = trim($data['user_id']);
     $san_pham_id = trim($data['san_pham_id']);
     $so_luong = trim($data['so_luong']);
 

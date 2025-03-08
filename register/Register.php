@@ -6,6 +6,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Đọc dữ liệu JSON từ request body
     $data = json_decode(file_get_contents("php://input"), true);
 
+
+
     // Kiểm tra xem dữ liệu JSON có tồn tại và có các trường cần thiết không
     if (isset($data['ho_ten']) && isset($data['mat_khau']) && isset($data['xac_nhan_mat_khau']) && isset($data['email'])) {
         $username = trim($data['ho_ten']);
